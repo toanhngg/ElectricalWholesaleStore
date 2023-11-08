@@ -1,0 +1,63 @@
+﻿<Page x:Class="ElecStore.CommodityView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ElecStore"
+      mc:Ignorable="d" 
+     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CommodityView">
+
+    <materialDesign:Card>
+        <Grid Margin="30,20,44,46">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="100*"/>
+
+            </Grid.ColumnDefinitions>
+
+            <TextBox materialDesign:HintAssist.Hint="  Nhập tên sản phẩm bạn muốn tìm" Background="AntiqueWhite" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Grid.ColumnSpan="3" Name="searchTextBox" Height="45" TextChanged="SearchTextBox_TextChanged" Margin="10,0,10,0" />
+            <Button
+                 Grid.Column="3" Margin="50,-7,33,4" Height="48"
+                 Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                 materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0" RenderTransformOrigin="1.004,0.631" Click="Button_Click_1">
+                Search
+            </Button>
+            <ListView ItemsSource="{Binding observableCommodities}" x:Name="listViewCommodity" Grid.Row="1" Grid.ColumnSpan="5" Margin="0,15,0,-16" >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=CommodityId}" />
+                        <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Path=CommodityName}" />
+                        <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Path=CommodityCategory.CategoryName}" />
+                        <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding Path=UnitPrice}" />
+                        <GridViewColumn Header="UnitInStock" DisplayMemberBinding="{Binding Path=UnitInStock}" />
+                        <GridViewColumn Header="Hành động">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                               Background="ForestGreen"
+                               Foreground="White"
+                                Height="20"
+                                Width="60"
+                                  
+                               Content="Mua hàng"
+                               Click="Button_Click"  />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+        </Grid>
+    </materialDesign:Card>
+</Page>

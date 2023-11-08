@@ -1,4 +1,4 @@
-﻿using ElectricalWholesaleStore_2.Models;
+﻿using ElecStore.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ElectricalWholesaleStore_2
+namespace ElecStore
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -21,10 +21,10 @@ namespace ElectricalWholesaleStore_2
         protected override void OnStartup(StartupEventArgs e)
         {
             var serviceColection = new ServiceCollection();
-            serviceColection.AddTransient<LoginWindow>();
-         //   serviceColection.AddScoped<ElectricStoreContext>();
+            serviceColection.AddTransient<MainWindow>();
+            serviceColection.AddScoped<ElecStore.Models.ElectricStoreContext>();
             ServiceProvider = serviceColection.BuildServiceProvider();
-            ServiceProvider.GetRequiredService<LoginWindow>().Show();
+            ServiceProvider.GetRequiredService<MainWindow>().Show();
         }
     }
 }
