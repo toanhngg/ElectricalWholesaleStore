@@ -35,30 +35,41 @@
                 <!-- Form hiện tại -->
                 <materialDesign:Card Grid.Column="0" Width="400" Margin="15">
                     <StackPanel Margin="10,0,32,0">
-                        <TextBox Text="{Binding ObjectDisplayName, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Tên sản phẩm" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <TextBox Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Số lượng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <TextBox Text="{Binding PriceOutput, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Giá của một sản phẩm" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <ComboBox Margin="5 5 15 5" ItemsSource="{Binding Promotion}" SelectedItem="{Binding SelectedPromotion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Promotion" IsEditable="True" Style="{StaticResource MaterialDesignFloatingHintComboBox}"></ComboBox>
-                        <TextBox Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Trạng thái xuất" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox x:Name="txtNameProduct"  IsReadOnly="True" />
+                        <TextBox x:Name="txtQuantity" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Số lượng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox x:Name="txtPrice" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Giá của một sản phẩm" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <ComboBox Margin="5 5 15 5" 
+                                  x:Name="cboPromotionID" 
+                                  ItemsSource="{Binding Promotion}"
+                                  DisplayMemberPath="PromotionName"
+                                  SelectedValuePath="PromotionID"
+                                  SelectedValue="{Binding PromotionID}" 
+                                  IsEditable="False" 
+                                   SelectedItem="{Binding SelectedPromotion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="Giảm giá" Style="{StaticResource MaterialDesignFloatingHintComboBox}"></ComboBox>
+                        <ComboBox Margin="5 5 15 5"
+                                  x:Name="cbopaymentMethod" 
+                                  ItemsSource="{Binding PaymentMethod}"
+                                  SelectedItem="{Binding SelectedPaymentMethod,
+                            Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                  materialDesign:HintAssist.Hint="Phương thức thanh toán"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            
+                        </ComboBox>
                     </StackPanel>
                 </materialDesign:Card>
 
                 <!-- Form khách hàng -->
-                <materialDesign:Card Grid.Column="1" Margin="15" Width="300">
-                    <!-- Thêm trường dữ liệu cho thông tin khách hàng ở đây -->
-                    <!-- Ví dụ: -->
-
-                    <StackPanel Margin="0,0,0,-14">
-                        <TextBox Text="{Binding CustomerName}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Tên khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <TextBox Text="{Binding CustomerAddress}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Địa chỉ khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <!-- Thêm các trường dữ liệu khách hàng khác ở đây -->
-                        <TextBox Text="{Binding CustomerAddress}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Địa chỉ khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                        <TextBox Text="{Binding CustomerAddress}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Địa chỉ khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <materialDesign:Card Grid.Column="1"  Width="300" Margin="0,0,20,0">
+                    <StackPanel  >
+                        <TextBox x:Name="CustomerName" Text="{Binding CustomerName}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Tên khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox x:Name="CustomerAddress" Text="{Binding CustomerAddress}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Địa chỉ khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox x:Name="CustomerPhone" Text="{Binding CustomerPhone}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Số điện thoại khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox x:Name="CustomerNote" Text="{Binding CustomerNote}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Ghi chú khách hàng" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
 
                     </StackPanel>
                 </materialDesign:Card>
             </Grid>
-            <Button Margin="10" Content="Submit" Command="{Binding SubmitCommand}"  Width="100" Grid.Row="1" />
+            <!--<Button Margin="10" Content="Submit" Command="{Binding SubmitCommand}"  Width="100" Grid.Row="1" />-->
 
             <GroupBox Grid.Row="2" Header="Tính Giá Trị Đơn Hàng" Margin="10">
                 <StackPanel>
@@ -66,11 +77,16 @@
                     <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" />
                     <TextBlock Text="Giá:" />
                     <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" />
+                    <TextBlock Text="Discount:" />
+                    <TextBlock Text="{Binding Discount}" Margin="5 5 15 5" />
                     <TextBlock Text="Tổng Giá Trị Đơn Hàng:" />
                     <TextBlock Text="{Binding TotalPrice}" Margin="5 5 15 5" />
+                    <TextBlock Text="Tổng Giá Trị Đơn Hàng sau giảm giá:" />
+                    <TextBlock Text="{Binding LastTotalPrice}" Margin="5 5 15 5" />
                 </StackPanel>
+
             </GroupBox>
-            <Button Content="Submit" Command="{Binding SubmitCommand}" Margin="230" Width="100" Grid.Row="2" />
+            <Button Content="Submit" Command="{Binding SubmitCommand}" Margin="350,268,350,192" Width="100" Grid.Row="2" Click="Button_Click" />
 
 
 

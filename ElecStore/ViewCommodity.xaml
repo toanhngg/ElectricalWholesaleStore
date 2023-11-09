@@ -7,43 +7,56 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="ViewCommodity" Height="450" Width="800">
-    <!--<materialDesign:Card>
-        <Grid Margin="30,20,44,46">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30.467"/>
-            <ColumnDefinition Width="19.533"/>
-            <ColumnDefinition Width="145*"/>
-            <ColumnDefinition Width="76*"/>
-            <ColumnDefinition Width="39*"/>
-            <ColumnDefinition Width="95*"/>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="355*"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0">
 
-        <TextBox Text="  Tìm kiếm sản phẩm" Background="AntiqueWhite" Grid.Column="0" VerticalAlignment="Center" FontSize="15" Grid.ColumnSpan="8" Name="searchTextBox" Height="45" TextChanged="SearchTextBox_TextChanged" Margin="10,0,10,0" />
-        <Button
-                   Grid.Column="8" Margin="8,1,8,1" Height="48"
-                   Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                   materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0">
-            Search
-        </Button>
-        <ListView x:Name="listViewCommodity"   Grid.Row="1" Grid.ColumnSpan="9" Margin="0,15,0,15"  >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="ID" Width="70" DisplayMemberBinding="{Binding Path=CommodityId}" />
-                    <GridViewColumn Header="Commodity Name" Width="180" DisplayMemberBinding="{Binding Path=CommodityName}" />
-                    <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Path=CommodityCategory.CategoryName}" />
-                    <GridViewColumn Header="UnitPrice" Width="150" DisplayMemberBinding="{Binding Path=UnitPrice}" />
-                    <GridViewColumn Header="UnitInStock" Width="150" DisplayMemberBinding="{Binding Path=UnitInStock}" />
-                    <GridViewColumn  Width="100"  />
-                </GridView>
-            </ListView.View>
-        </ListView>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!--các element binding từ selected item-->
+            <materialDesign:Card Grid.Row="0" Margin="5">
+                <WrapPanel Margin="0 0 0 10">
+                    <TextBox Text="{Binding CommodityId, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="CommodityId" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox Text="{Binding CategoryId, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Category" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox Text="{Binding CommodityName, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Commodity Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="UnitPrice" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox Text="{Binding UnitInStock, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="UnitInStock" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                </WrapPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Row="1" Margin="5">
+                <WrapPanel>
+                    <Button Command="{Binding AddCommand}" Content="Thêm" Margin="5" Width="100" Click="Button_Click"></Button>
+                    <Button Command="{Binding EditCommand}" Content="Sửa" Margin="5" Width="100" Click="Button_Click_1"></Button>
+                    <Button Command="{Binding DeleteCommand}" Content="Xóa" Margin="5" Width="100" Click="Button_Click_2"></Button>
+                </WrapPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Row="2" Margin="5" VerticalAlignment="Stretch">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ListView ItemsSource="{Binding List}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="CommodityId" DisplayMemberBinding="{Binding CommodityId}"></GridViewColumn>
+                                <GridViewColumn Header="Category" DisplayMemberBinding="{Binding CommodityCategory.CategoryName}"></GridViewColumn>
+                                <GridViewColumn Header="Commodity Name" DisplayMemberBinding="{Binding CommodityName}"></GridViewColumn>
+                                <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding UnitPrice}"></GridViewColumn>
+                                <GridViewColumn Header="UnitInStock" DisplayMemberBinding="{Binding UnitInStock}"></GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </ScrollViewer>
+            </materialDesign:Card>
+        </Grid>
     </Grid>
-    </materialDesign:Card>-->
 </Window>

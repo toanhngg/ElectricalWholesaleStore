@@ -32,12 +32,12 @@
                  materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0" RenderTransformOrigin="1.004,0.631" Click="Button_Click_1">
                 Search
             </Button>
-            <ListView ItemsSource="{Binding observableCommodities}" x:Name="listViewCommodity" Grid.Row="1" Grid.ColumnSpan="5" Margin="0,15,0,-16" >
+            <ListView ItemsSource="{Binding observableCommodities}" x:Name="listViewCommodity" Grid.Row="1" Grid.ColumnSpan="5" Margin="0,15,0,-16"  >
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=CommodityId}" />
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=CommodityID}" />
                         <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Path=CommodityName}" />
-                        <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Path=CommodityCategory.CategoryName}" />
+                        <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Path=CategoryName}" />
                         <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding Path=UnitPrice}" />
                         <GridViewColumn Header="UnitInStock" DisplayMemberBinding="{Binding Path=UnitInStock}" />
                         <GridViewColumn Header="Hành động">

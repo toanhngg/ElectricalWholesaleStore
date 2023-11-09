@@ -33,15 +33,42 @@ namespace ElecStore
         }
         public void LoadDataListCommodity()
         {
-            listViewCommodity.ItemsSource = _context.CommodityCategories.Include(x => x.Commodities).ToList();
+            var commodityList = _context.Commodities
+               .Join(_context.CommodityCategories,
+        commodity => commodity.CategoryId,
+        category => category.CategoryId,
+        (commodity, category) => new
+        {
+            CommodityID = commodity.CommodityId,
+            CommodityName = commodity.CommodityName,
+            UnitPrice = commodity.UnitPrice,
+            UnitInStock = commodity.UnitInStock,
+            CategoryName = category.CategoryName
+        })
+    .ToList();
+
+            // commodityList bây giờ chứa danh sách Commodity kèm theo CategoryName
+
+            listViewCommodity.ItemsSource = commodityList;
 
         }
         
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            HomePage homePage = new HomePage(_context);
-            homePage.Show();
+            //Button button = (Button)sender;
+            //var selectedCommodity = (Commodity)button.DataContext;
+            Button button = (Button)sender;
+            var selectedItem = (dynamic)button.DataContext;
+
+            string commodityName = selectedItem.CommodityName;
+            Commodity commodity = _context.Commodities.SingleOrDefault(x => x.CommodityName.Equals(commodityName));
+
+            //  decimal unitPrice = selectedItem.UnitPrice;
+            int commodityId = commodity.CommodityId;
+            OrderView order = new OrderView(_context, commodityId);
+
+            order.Show();
 
            // this.Close(); // Đóng window hiện tại
         }
@@ -80,6 +107,17 @@ namespace ElecStore
             }
 
         }
+        //int selectedProductID = 0;
+        //private void listViewCommodity_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (listViewCommodity.SelectedItem != null)
+        //    {
+        //        // Lấy ID của sản phẩm được chọn
+        //         selectedProductID = ((Commodity)listViewCommodity.SelectedItem).CommodityId;
+
+        //        // Sử dụng selectedProductID cho mục đích của bạn (ví dụ: thêm sản phẩm vào giỏ hàng).
+        //    }
+        //}
 
         //public ViewCommodity(ElectricStoreContext context)
         //{

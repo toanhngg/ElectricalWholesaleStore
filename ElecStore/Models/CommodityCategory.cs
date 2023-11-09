@@ -14,5 +14,6 @@ namespace ElecStore.Models
         public string? CategoryName { get; set; }
 
         public virtual ICollection<Commodity> Commodities { get; set; }
+
     }
 }

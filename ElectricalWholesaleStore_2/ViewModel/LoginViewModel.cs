@@ -42,7 +42,7 @@ namespace ElectricalWholesaleStore_2.ViewModel
         {
             if (p == null)
                 return;
-         //   var accCount = _context.Users.Where(x => x.UserName == UserName && x.Password == Password).Count();
+     //   var accCount = _context.Users.Where(x => x.UserName == UserName && x.Password == Password).Count();
 
             if (accCount > 0)
             {
