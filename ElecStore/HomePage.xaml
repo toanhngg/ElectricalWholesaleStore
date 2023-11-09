@@ -30,11 +30,9 @@
 
             </TabItem>
 
-
-
-            <TabItem
+            <TabItem x:Name="Tab4"
            Header="Thêm sản phẩm">
-                <!--<Frame Source="AddComidity.xaml"/>-->
+               <!--<Frame x:Name="frMain1" Source="ManagerCommodityView.xaml"/>-->
 
             </TabItem>
 

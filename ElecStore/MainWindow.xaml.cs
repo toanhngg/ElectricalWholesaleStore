@@ -21,10 +21,10 @@ namespace ElecStore
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly ElecStore.Models.ElectricStoreContext _context;
+        private readonly ElecStore.Models.ElectricStore1Context _context;
 
 
-        public MainWindow(ElectricStoreContext context)
+        public MainWindow(ElectricStore1Context context)
         {
             InitializeComponent();
             _context = context;

@@ -21,9 +21,9 @@ namespace ElecStore
     /// </summary>
     public partial class HomePage : Window
     {
-        private readonly ElectricStoreContext _context;
+        private readonly ElectricStore1Context _context;
 
-        public HomePage(ElectricStoreContext context)
+        public HomePage(ElectricStore1Context context)
         {
             InitializeComponent();
             _context = context;
@@ -37,16 +37,16 @@ namespace ElecStore
 
 
             if (tabControl.SelectedItem is TabItem selectedTab)
-            {
-                // Bây giờ bạn có thể sử dụng selectedTab mà không cần ép kiểu lại.
-               
-                if (selectedTab.Name == "Tab2")
+            {      
+                
+                if (selectedTab.Name == "Tab4")
                 {
-                    MessageBox.Show("hihi");
-                   // frMain.Content = new CommoditView(_context);
-                    // Thực hiện các hành động khi người dùng chuyển đến Tab 2
+
+                    // frMain1.Content = new ManagerCommodityView(_context);
+                    ViewCommodity order = new ViewCommodity(_context);
+
+                    order.Show();
                 }
-                // Thêm các điều kiện cho các tab khác nếu cần thiết.
             }
         }
 

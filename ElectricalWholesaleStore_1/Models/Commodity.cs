@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ElecStore.Models
+namespace ElectricalWholesaleStore_1.Models
 {
     public partial class Commodity
     {
@@ -20,4 +20,3 @@ namespace ElecStore.Models
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
-

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ElecStore.Models
+namespace ElectricalWholesaleStore_1.Models
 {
     public partial class Promotion
     {
         public int PromotionId { get; set; }
         public string? PromotionName { get; set; }
-
-        public float? Discount { get; set; }
+        public double? Discount { get; set; }
     }
 }

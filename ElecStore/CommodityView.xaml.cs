@@ -24,8 +24,8 @@ namespace ElecStore
     /// </summary>
     public partial class CommodityView : Page
     {
-        private readonly ElectricStoreContext _context;
-        public CommodityView(ElectricStoreContext context)
+        private readonly ElectricStore1Context _context;
+        public CommodityView(ElectricStore1Context context)
         {
             InitializeComponent();
             _context = context;
@@ -48,24 +48,19 @@ namespace ElecStore
     .ToList();
 
             // commodityList bây giờ chứa danh sách Commodity kèm theo CategoryName
+            listViewCommodity.ItemsSource = _context.Commodities.Include(x => x.Category).ToList();
 
-            listViewCommodity.ItemsSource = commodityList;
+          //  listViewCommodity.ItemsSource = commodityList;
 
         }
         
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = (Button)sender;
-            //var selectedCommodity = (Commodity)button.DataContext;
             Button button = (Button)sender;
-            var selectedItem = (dynamic)button.DataContext;
+            Commodity selectedCommodity = (Commodity)button.DataContext;
 
-            string commodityName = selectedItem.CommodityName;
-            Commodity commodity = _context.Commodities.SingleOrDefault(x => x.CommodityName.Equals(commodityName));
-
-            //  decimal unitPrice = selectedItem.UnitPrice;
-            int commodityId = commodity.CommodityId;
+            int commodityId = selectedCommodity.CommodityId;
             OrderView order = new OrderView(_context, commodityId);
 
             order.Show();

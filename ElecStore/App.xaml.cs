@@ -22,7 +22,7 @@ namespace ElecStore
         {
             var serviceColection = new ServiceCollection();
             serviceColection.AddTransient<MainWindow>();
-            serviceColection.AddScoped<ElecStore.Models.ElectricStoreContext>();
+            serviceColection.AddScoped<ElecStore.Models.ElectricStore1Context>();
             ServiceProvider = serviceColection.BuildServiceProvider();
             ServiceProvider.GetRequiredService<MainWindow>().Show();
         }

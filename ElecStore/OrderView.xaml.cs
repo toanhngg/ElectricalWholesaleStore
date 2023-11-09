@@ -23,8 +23,8 @@ namespace ElecStore
     /// </summary>
     public partial class OrderView : Window
     {
-        private readonly ElectricStoreContext _context;
-        public OrderView(ElectricStoreContext context, int selectedProductID)
+        private readonly ElectricStore1Context _context;
+        public OrderView(ElectricStore1Context context, int selectedProductID)
         {
             InitializeComponent();
             OrderViewModel viewModel = new OrderViewModel();
@@ -77,9 +77,10 @@ namespace ElecStore
             {
                 string commodityName = txtNameProduct.Text; // Ví dụ: lấy giá trị từ ComboBox
                 Date date = new Date
-                {   DateId = 105,
+                { //  DateId = 105,
                     Day = DateTime.Now.Day,
                     Month = DateTime.Now.Month,
+                    Quarter = 5,
                     Year = DateTime.Now.Year
                 };
                 _context.Dates.Add(date);
@@ -88,7 +89,7 @@ namespace ElecStore
                 // Nếu khách hàng chưa tồn tại, tạo một bản ghi khách hàng mới
                 Customer newCustomer = new Customer
                 {
-                    CustomerId = 107,
+                  //  CustomerId = 107,
                     CustomerName = "Tên khách hàng",
                     CustomerPhone = "Số điện thoại",
                     CustomerAddress = "Địa chỉ",
@@ -115,7 +116,7 @@ namespace ElecStore
                 // Tạo một đối tượng Order và thiết lập các thuộc tính
                 Order order = new Order
                 {
-                    OrderId = 3,
+                   // OrderId = 3,
                     CommodityId = cm.CommodityId,
                     DateId = date.DateId,
                     CustomerId = customerId,

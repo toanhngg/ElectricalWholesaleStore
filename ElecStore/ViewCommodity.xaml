@@ -10,6 +10,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -25,33 +26,41 @@
 
             <!--các element binding từ selected item-->
             <materialDesign:Card Grid.Row="0" Margin="5">
-                <WrapPanel Margin="0 0 0 10">
-                    <TextBox Text="{Binding CommodityId, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="CommodityId" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                    <TextBox Text="{Binding CategoryId, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Category" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                    <TextBox Text="{Binding CommodityName, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="Commodity Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                    <TextBox Text="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="UnitPrice" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                    <TextBox Text="{Binding UnitInStock, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" materialDesign:HintAssist.Hint="UnitInStock" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                <WrapPanel Margin="10 10 10 10">
+                    <TextBox IsEnabled="True" x:Name ="CommodityId" Text="{Binding CommodityId,Mode=TwoWay}" DataContext="{Binding SelectedItem, ElementName=listViewCommodity}" Margin="5 5 25 5" materialDesign:HintAssist.Hint="ID" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <ComboBox Margin="5 15 25 5 " Width="200"  
+         x:Name="cboCategoryID" 
+         DisplayMemberPath="CategoryName"
+         SelectedValuePath="CategoryId"
+         SelectedValue="{Binding CategoryId}" 
+         IsEditable="False" 
+          materialDesign:HintAssist.Hint="Category" DataContext="{Binding SelectedItem,Mode=TwoWay, ElementName=listViewCommodity}"></ComboBox>
+                    <TextBox  x:Name="CommodityName"  Text="{Binding CommodityName,Mode=TwoWay}"  DataContext="{Binding SelectedItem, ElementName=listViewCommodity}" Margin="5 5 25 5" materialDesign:HintAssist.Hint="Commodity Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox  x:Name="UnitPrice" PreviewTextInput="UnitPrice_PreviewTextInput"  Text="{Binding UnitPrice,Mode=TwoWay}" DataContext="{Binding SelectedItem, ElementName=listViewCommodity}" Margin="5 5 25 5" materialDesign:HintAssist.Hint="UnitPrice" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <TextBox  x:Name="UnitInStock" PreviewTextInput="UnitInStock_PreviewTextInput" Text="{Binding UnitInStock,Mode=TwoWay}" DataContext="{Binding SelectedItem, ElementName=listViewCommodity}" Margin="5 5 25 5" materialDesign:HintAssist.Hint="UnitInStock" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                 </WrapPanel>
             </materialDesign:Card>
 
             <materialDesign:Card Grid.Row="1" Margin="5">
                 <WrapPanel>
-                    <Button Command="{Binding AddCommand}" Content="Thêm" Margin="5" Width="100" Click="Button_Click"></Button>
-                    <Button Command="{Binding EditCommand}" Content="Sửa" Margin="5" Width="100" Click="Button_Click_1"></Button>
-                    <Button Command="{Binding DeleteCommand}" Content="Xóa" Margin="5" Width="100" Click="Button_Click_2"></Button>
+                    <Button Command="{Binding AddCommand}" Content="Add" Margin="5" Width="100" Click="Button_Click_Add"></Button>
+                    <Button Command="{Binding EditCommand}" Content="Edit" Margin="5" Width="100" Click="Button_Click_Edit"></Button>
+                    <Button Command="{Binding DeleteCommand}" Content="Delete" Margin="5" Width="100" Click="Button_Click_Delete"></Button>
+                    <Button Command="{Binding RefreshCommand}" Content="Refresh" Margin="5" Width="100" Click="Button_Click_Refresh"></Button>
+
                 </WrapPanel>
             </materialDesign:Card>
 
             <materialDesign:Card Grid.Row="2" Margin="5" VerticalAlignment="Stretch">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ListView ItemsSource="{Binding List}" SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}">
+                    <ListView x:Name="listViewCommodity" Height="311" >
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="CommodityId" DisplayMemberBinding="{Binding CommodityId}"></GridViewColumn>
-                                <GridViewColumn Header="Category" DisplayMemberBinding="{Binding CommodityCategory.CategoryName}"></GridViewColumn>
-                                <GridViewColumn Header="Commodity Name" DisplayMemberBinding="{Binding CommodityName}"></GridViewColumn>
-                                <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding UnitPrice}"></GridViewColumn>
-                                <GridViewColumn Header="UnitInStock" DisplayMemberBinding="{Binding UnitInStock}"></GridViewColumn>
+                                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path = CommodityId}" />
+                                <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Path = CommodityName}" />
+                                <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Path = CommodityCategory.CategoryName}" />
+                                <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding Path = UnitPrice}" />
+                                <GridViewColumn Header="UnitInStock" DisplayMemberBinding="{Binding Path = UnitInStock}" />
                             </GridView>
                         </ListView.View>
                     </ListView>

@@ -44,19 +44,19 @@ namespace ElectricalWholesaleStore_2.ViewModel
                 return;
      //   var accCount = _context.Users.Where(x => x.UserName == UserName && x.Password == Password).Count();
 
-            if (accCount > 0)
-            {
-                IsLogin = true;
-                MessageBox.Show("danh nhap thanh cong!");
+        //    if (accCount > 0)
+        //    {
+        //        IsLogin = true;
+        //        MessageBox.Show("danh nhap thanh cong!");
 
-                p.Close();
-            }
-            else
-            {
-                IsLogin = false;
-                MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
-            }
-        }
+        //        p.Close();
+        //    }
+        //    else
+        //    {
+        //        IsLogin = false;
+        //        MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
+        //    }
+       }
 
-    }
+   }
     }
