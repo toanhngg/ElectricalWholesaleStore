@@ -60,7 +60,7 @@ namespace ElecStore
 
                     if(user != null)
                     {
-                        HomePage homePage = new HomePage(_context);
+                        HomePage homePage = new HomePage(_context, user);
                         homePage.Show();
 
                         this.Close(); // Đóng window hiện tại

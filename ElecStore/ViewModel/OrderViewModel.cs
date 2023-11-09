@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ElecStore.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -31,7 +33,7 @@ namespace ElecStore.ViewModel
         }
 
         private double _price;
-        public double Price
+        public  double Price
         {
             get { return _price; }
             set
@@ -43,6 +45,11 @@ namespace ElecStore.ViewModel
                     CalculateTotalPrice();
                 }
             }
+        }
+        public void UpdatePrice(double newValue)
+        {
+            // Thực hiện các xử lý khi nhận được giá trị từ code-behind
+            Price = newValue;
         }
 
         private double _totalPrice;
@@ -75,27 +82,108 @@ namespace ElecStore.ViewModel
                 }
             }
         }
-       
-        double discount = 0;
-        private void CalculateTotalPrice()
+        private ObservableCollection<Promotion> _promotions;
+        private Promotion _selectedPromotion;
+
+        public ObservableCollection<Promotion> Promotions
         {
-          //  TotalPrice  = Quantity * Price * 1.5;
-            if(TotalPrice > 100000000)
+            get { return _promotions; }
+            set
             {
-                TotalPrice = Quantity * Price * 1.5;
-                discount = 0.1; // 10% giảm giá cho mức từ 100 triệu trở lên
-                double additionalDiscount = Math.Floor((TotalPrice - 100000000) / 100000000) * 0.02; // Tính giảm giá bổ sung
-                discount = Math.Min(discount + additionalDiscount, 0.4); // Tối đa 40% giảm giá
-                LastTotalPrice = TotalPrice - (TotalPrice * discount);
+                if (_promotions != value)
+                {
+                    _promotions = value;
+                    OnPropertyChanged(nameof(Promotions));
+                }
+            }
+        }
+
+        public Promotion SelectedPromotion
+        {
+            get { return _selectedPromotion; }
+            set
+            {
+                if (_selectedPromotion != value)
+                {
+                    _selectedPromotion = value;
+                    OnPropertyChanged(nameof(SelectedPromotion));
+
+                    // Gọi phương thức để cập nhật total price khi một promotion được chọn
+                    UpdateTotalPrice();
+                }
+            }
+        }
+        public void UpdateTotalPrice()
+        {
+            if (SelectedPromotion != null)
+            {
+                float discountPercentage =(float) SelectedPromotion.Discount;
+                TotalPrice = CalculateTotalPriceWithDiscount(discountPercentage);
             }
             else
             {
-                TotalPrice = Quantity * Price * 1.5;
-                LastTotalPrice = Quantity * Price * 1.5;
+                TotalPrice = CalculateTotalPriceWithoutDiscount();
+            }
+        }
+        private double CalculateTotalPriceWithDiscount(double discountPercentage)
+        {
+            double discountedPrice = TotalPrice * (1 - discountPercentage);
+            return discountedPrice;
+        }
 
+        private double CalculateTotalPriceWithoutDiscount()
+        {
+            double totalPrice = TotalPrice;
+            return totalPrice;
+        }
+
+        double discount = 0;
+        private void CalculateTotalPrice()
+        {
+            //  TotalPrice  = Quantity * Price * 1.5;
+            //if(TotalPrice > 100000000)
+            //{
+            //    TotalPrice = Quantity * Price * 1.5;
+            //    discount = 0.1; // 10% giảm giá cho mức từ 100 triệu trở lên
+            //    double additionalDiscount = Math.Floor((TotalPrice - 100000000) / 100000000) * 0.02; // Tính giảm giá bổ sung
+            //    discount = Math.Min(discount + additionalDiscount, 0.4); // Tối đa 40% giảm giá
+            //    LastTotalPrice = TotalPrice - (TotalPrice * discount);
+            //}
+            //else
+            //{
+            //    TotalPrice = Quantity * Price * 1.5;
+            //    LastTotalPrice = Quantity * Price * 1.5;
+
+            //}
+            double baseTotalPrice = Quantity * Price ;
+
+            if (SelectedPromotion != null)
+            {
+                float discountPercentage = (float)SelectedPromotion.Discount;
+                TotalPrice = baseTotalPrice;
+                LastTotalPrice = baseTotalPrice * (1 - discountPercentage);
+            }
+            else
+            {
+                TotalPrice = baseTotalPrice;
+                if (TotalPrice > 100000000)
+                {
+                    discount = 0.1; // 10% giảm giá cho mức từ 100 triệu trở lên
+                    double additionalDiscount = Math.Floor((TotalPrice - 100000000) / 100000000) * 0.02; // Tính giảm giá bổ sung
+                    discount = Math.Min(discount + additionalDiscount, 0.4); // Tối đa 40% giảm giá
+                    LastTotalPrice = TotalPrice - (TotalPrice * discount);
+                }
+                else
+                {
+                    LastTotalPrice = TotalPrice;
+                }
             }
 
+            // Áp dụng các loại giảm giá khác tùy thuộc vào điều kiện
+           
         }
 
     }
-}
+
+    }
+

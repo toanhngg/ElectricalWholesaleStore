@@ -25,11 +25,14 @@ namespace ElecStore
     public partial class CommodityView : Page
     {
         private readonly ElectricStore1Context _context;
-        public CommodityView(ElectricStore1Context context)
+        private readonly User _loggedInUser;
+
+        public CommodityView(ElectricStore1Context context, User loggedInUser)
         {
             InitializeComponent();
             _context = context;
             LoadDataListCommodity();
+            _loggedInUser = loggedInUser;
         }
         public void LoadDataListCommodity()
         {
@@ -61,7 +64,7 @@ namespace ElecStore
             Commodity selectedCommodity = (Commodity)button.DataContext;
 
             int commodityId = selectedCommodity.CommodityId;
-            OrderView order = new OrderView(_context, commodityId);
+            OrderView order = new OrderView(_context, commodityId, _loggedInUser);
 
             order.Show();
 

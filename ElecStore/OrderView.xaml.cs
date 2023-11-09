@@ -24,7 +24,8 @@ namespace ElecStore
     public partial class OrderView : Window
     {
         private readonly ElectricStore1Context _context;
-        public OrderView(ElectricStore1Context context, int selectedProductID)
+        private readonly User _loggedInUser;
+        public OrderView(ElectricStore1Context context, int selectedProductID, User loggedInUser)
         {
             InitializeComponent();
             OrderViewModel viewModel = new OrderViewModel();
@@ -32,14 +33,21 @@ namespace ElecStore
             // Gán ViewModel này cho DataContext của cửa sổ
             DataContext = viewModel;
             _context = context;
+            _loggedInUser = loggedInUser;
             LoadDataListPromotion(selectedProductID);
         }
+        public Commodity cm = new Commodity();
+
         public void LoadDataListPromotion(int idComppodity)
         {
-            Commodity cm = _context.Commodities.FirstOrDefault(x => x.CommodityId == idComppodity);
+             cm = _context.Commodities.FirstOrDefault(x => x.CommodityId == idComppodity);
             if (cm != null)
             {
                 txtNameProduct.Text = cm.CommodityName;
+                txtPrice.Text = cm.UnitPrice.ToString();
+                  txtNameProduct.IsReadOnly = true;
+                 txtPrice.IsReadOnly = true;
+                SomeMethodInCodeBehind();
                 cboPromotionID.ItemsSource = _context.Promotions.ToList();
                 cbopaymentMethod.Items.Add("Thanh toán khi nhận hàng");
                 cbopaymentMethod.Items.Add("Thanh toán khi qua chuyển khoản");
@@ -47,24 +55,57 @@ namespace ElecStore
 
             }
         }
+
+        private void SomeMethodInCodeBehind()
+        {
+            // Lấy ViewModel từ DataContext
+            OrderViewModel viewModel = DataContext as OrderViewModel;
+
+            // Kiểm tra null trước khi gán giá trị
+            if (viewModel != null)
+            {
+                // Gán giá trị vào thuộc tính của ViewModel
+          //      viewModel.Price = double.Parse(cm.UnitPrice.ToString()); // Ví dụ giá trị cần gán
+ 
+                viewModel.UpdatePrice(double.Parse(cm.UnitPrice.ToString()));
+
+            }
+        }
+
         public static string GenerateRandomInvoiceCode()
         {
-            // Độ dài của mã hóa đơn bạn muốn tạo
             int length = 8;
 
-            // Dùng các ký tự số và chữ cái (hoa hoặc thường) để tạo mã hóa đơn ngẫu nhiên
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-            // Sử dụng đối tượng Random để tạo mã ngẫu nhiên
             Random random = new Random();
 
-            // Tạo mã hóa đơn bằng cách chọn ngẫu nhiên các ký tự từ chuỗi `chars`
             string invoiceCode = new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
 
             return invoiceCode;
         }
 
+        private void txtQuantity_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(txtQuantity.Text, out int enteredQuantity))
+            {
+                if (enteredQuantity > cm.UnitInStock)
+                {
+                    MessageBox.Show("Số lượng nhập vào vượt quá số lượng có sẵn trong kho.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtQuantity.Text = cm.UnitInStock.ToString();
+                }
+                else
+                {
+                    // Lưu giá trị để sử dụng cho lần kiểm tra tiếp theo
+                    txtQuantity.Text = enteredQuantity.ToString();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng nhập số phù hợp.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -90,9 +131,13 @@ namespace ElecStore
                 Customer newCustomer = new Customer
                 {
                   //  CustomerId = 107,
-                    CustomerName = "Tên khách hàng",
-                    CustomerPhone = "Số điện thoại",
-                    CustomerAddress = "Địa chỉ",
+                    CustomerName = CustomerName.Text,
+                    CustomerPhone = CustomerAddress.Text,
+                    CustomerAddress = CustomerPhone.Text,
+                    CustomerType = "vip",
+                    Discount = 0.1m,
+                    TotalBought = Int32.Parse(txtTotalPrice.Text),
+                    Comment = CustomerNote.Text,
                     //// Các thuộc tính khác
                     //CustomerType = "kk",
                     //Discount = 0,
@@ -107,38 +152,53 @@ namespace ElecStore
                 int selectedPaymentMethodIndex = cbopaymentMethod.SelectedIndex;
                 string paymentMethod = cbopaymentMethod.Items[selectedPaymentMethodIndex].ToString();
                 string invoiceCode = GenerateRandomInvoiceCode();
-                //var user = _context.Users.SingleOrDefault(u => u.UserName == User.Identity.Name);
 
-                //if (user != null)
-                //{
-                //    int userId = user.Id; // Lấy userId của người dùng
-                //}
-                // Tạo một đối tượng Order và thiết lập các thuộc tính
                 Order order = new Order
                 {
                    // OrderId = 3,
                     CommodityId = cm.CommodityId,
                     DateId = date.DateId,
                     CustomerId = customerId,
-                    StoreId = 1,
-                    PricedProducts = Int32.Parse(txtQuantity.Text) * Int32.Parse(txtPrice.Text),
+                    StoreId = _loggedInUser.StoreId,
+                    PricedProducts = Int32.Parse(txtTotalPrice.Text),
                     PromotionId = cboPromotionID.SelectedIndex,
                     PaymentMethod = paymentMethod,
                     InvoiceNumber = invoiceCode,
-                    UserId = 1
+                    UserId = _loggedInUser.UserId
                 };
 
                     _context.Orders.Add(order);
                     _context.SaveChanges();
-              
-                    MessageBox.Show("Insert thành công!"); // Hiển thị thông báo khi insert thành công
-                    HomePage homePage = new HomePage(_context);
+                OrderDetail orderdetail = new OrderDetail
+                {
+                    // OrderId = 3,
+                    OrderId = order.OrderId,
+                    UnitPrice = decimal.Parse(cm.UnitPrice.ToString()),
+                    Quantity = customerId,
+                    TotalPrice = Int32.Parse(txtTotalPrice.Text)
+
+                };
+                _context.OrderDetails.Add(orderdetail);
+                _context.SaveChanges();
+                MessageBox.Show("Đặt hàng thành công!"); // Hiển thị thông báo khi insert thành công
+                    HomePage homePage = new HomePage(_context, _loggedInUser);
                     homePage.Show();
 
                     this.Close(); // Đóng window hiện tại
 
          
             }
+        }
+
+        private void cboPromotionID_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewModel = DataContext as OrderViewModel;
+            viewModel?.UpdateTotalPrice();
         }
     }
 }

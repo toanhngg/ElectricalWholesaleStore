@@ -7,35 +7,47 @@
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"             
         Title="HomePage" Height="450" Width="800">
-    <materialDesign:Card>
-        <TabControl
+    <DockPanel>
+        <!-- Thanh công cụ bên trái -->
+        <StackPanel DockPanel.Dock="Left" Width="102" Height="436">
+            <!-- Thêm các nút hoặc biểu tượng cho thanh công cụ -->
+            <Button Height="50" Margin="0 50 0 2" Content="Profile" Click="ProfileButton_Click"/>
+            <Button Height="50"  Content="Chart" Click="ChartButton_Click"/>
+            <Button Height="50"  Content="Vew Cart" Click="CartButton_Click"/>
+            <Button Height="50"  Content="Log out" Click="LogoutButton_Click" />
+            <!-- Thêm các nút khác nếu cần -->
+        </StackPanel>
+        <materialDesign:Card>
+            <TabControl
        HorizontalContentAlignment="Left"
           materialDesign:ColorZoneAssist.Mode="SecondaryMid"
-             x:Name="tabControl" SelectionChanged="tabControl_SelectionChanged" >
-        <!--<Frame x:Name="frMain" Margin="0,20,0,39" Grid.ColumnSpan="2" Height="400"/>-->
+             x:Name="tabControl" SelectionChanged="tabControl_SelectionChanged"  >
+                <!--<Frame x:Name="frMain" Margin="0,20,0,39" Grid.ColumnSpan="2" Height="400"/>-->
 
-            <TabItem x:Name="Tab1"
+                <TabItem x:Name="Tab1"
            Header="Mặt hàng">
-                <Frame x:Name="frMain" Source="ViewCommodity.xaml"/>
-            </TabItem>
+                    <!--<Frame x:Name="frMain" Source="ViewCommodity.xaml"/>-->
+                    <Frame x:Name="frMain"/>
 
-            <TabItem x:Name="Tab2"
+                </TabItem>
+
+                <TabItem x:Name="Tab2"
            Header="Order">
-                <!--<Frame Source="Order.xaml" Navigated="Frame_Navigated"/>-->
-            </TabItem>
+                    <!--<Frame Source="Order.xaml" Navigated="Frame_Navigated"/>-->
+                </TabItem>
 
-            <TabItem
-           Header="Customer">
-                <!--<Frame Source="Customer.xaml"/>-->
+                <TabItem x:Name="Tab3"
+           Header="Customer View">
+                    <Frame x:Name="frMain1"/>
 
-            </TabItem>
+                </TabItem>
 
-            <TabItem x:Name="Tab4"
+                <TabItem x:Name="Tab4"
            Header="Thêm sản phẩm">
-               <!--<Frame x:Name="frMain1" Source="ManagerCommodityView.xaml"/>-->
 
-            </TabItem>
+                </TabItem>
 
-        </TabControl>
-    </materialDesign:Card>
+            </TabControl>
+        </materialDesign:Card>
+    </DockPanel>
 </Window>

@@ -7,7 +7,6 @@ namespace ElecStore.Models
     {
         public int PromotionId { get; set; }
         public string? PromotionName { get; set; }
-
-        public float? Discount { get; set; }
+        public double? Discount { get; set; }
     }
 }

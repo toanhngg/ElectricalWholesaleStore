@@ -1,0 +1,35 @@
+﻿<Window x:Class="ElecStore.InvoiceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ElecStore"
+        mc:Ignorable="d"
+        Title="InvoiceView" Height="450" Width="800">
+    <Grid>
+        <StackPanel Margin="20">
+            <!-- Hình ảnh cửa hàng -->
+            <Image Source="D:\PRN221\ProjectPRN221\meo3.jpg" Width="150" Height="100" HorizontalAlignment="Left" Margin="0 0 20 0"/>
+
+            <TextBlock Text="Hóa Đơn" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 0 0 10"/>
+
+            <!-- Thông tin đơn hàng -->
+            <TextBlock Text="Thông Tin Đơn Hàng" FontSize="16" FontWeight="Bold" Margin="0 0 0 10"/>
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Số Lượng:" FontWeight="Bold" Margin="0 0 10 0"/>
+                <TextBlock Text="{Binding Quantity}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Giá Tiền:" FontWeight="Bold" Margin="0 0 10 0"/>
+                <TextBlock Text="{Binding TotalPrice}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Chiết Khấu:" FontWeight="Bold" Margin="0 0 10 0"/>
+                <TextBlock Text="{Binding Discount}" />
+            </StackPanel>
+
+            <!-- Button để in hóa đơn -->
+            <Button Content="In Hóa Đơn" Command="{Binding PrintInvoiceCommand}" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+        </StackPanel>
+    </Grid>
+</Window>

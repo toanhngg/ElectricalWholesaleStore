@@ -191,6 +191,12 @@ namespace ElectricalWholesaleStore_1.Models
 
                 entity.Property(e => e.Password).HasMaxLength(255);
 
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.StoreId).HasColumnName("StoreID");
+
                 entity.Property(e => e.UserName).HasMaxLength(255);
             });
 
