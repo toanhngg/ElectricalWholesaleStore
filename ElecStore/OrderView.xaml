@@ -79,13 +79,13 @@
             <GroupBox Grid.Row="2" Header="Hóa đơn" Margin="10">
                 <StackPanel>
                     <TextBlock Text="Số lượng:" />
-                    <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" />
+                    <TextBox IsReadOnly="True" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" />
                     <TextBlock Text="Giá:" />
-                    <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" />
-                    <TextBlock Text="Discount:" />
-                    <TextBlock Text="{Binding Discount}" Margin="5 5 15 5" />
+                    <TextBox IsReadOnly="True"  Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" Margin="5 5 15 5" />
+                    <!--<TextBlock Text="Discount:" />
+                    <TextBlock Text="{Binding Discount}" Margin="5 5 15 5" />-->
                     <TextBlock Text="Tổng Giá Trị Đơn Hàng:" />
-                    <TextBlock x:Name="txtTotalPrice" Text="{Binding TotalPrice}" Margin="5 5 15 5" />
+                    <TextBlock  x:Name="txtTotalPrice" Text="{Binding TotalPrice}" Margin="5 5 15 5" />
                     <TextBlock Text="Tổng Giá Trị Đơn Hàng sau giảm giá:" />
                     <TextBlock Text="{Binding LastTotalPrice}" Margin="5 5 15 5" />
                 </StackPanel>

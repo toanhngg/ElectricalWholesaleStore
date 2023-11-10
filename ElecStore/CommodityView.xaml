@@ -50,8 +50,21 @@
                                 Height="40"
                                 Width="100"
                                   
-                               Content="Mua hàng"
+                               Content="Buy Now"
                                Click="Button_Click"  />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                   Background="ForestGreen"
+                                    Foreground="White"
+                                    Height="40"
+                                    Width="100"
+                                    Content="Add cart"
+                                  Click="Button_Add_To_Cart_Click"  />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

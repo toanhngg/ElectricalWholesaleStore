@@ -16,6 +16,7 @@ namespace ElecStore.Models
         {
         }
 
+        public virtual DbSet<Cart> Carts { get; set; } = null!;
         public virtual DbSet<Commodity> Commodities { get; set; } = null!;
         public virtual DbSet<CommodityCategory> CommodityCategories { get; set; } = null!;
         public virtual DbSet<Customer> Customers { get; set; } = null!;
@@ -37,6 +38,24 @@ namespace ElecStore.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("Cart");
+
+                entity.Property(e => e.CartId).HasColumnName("CartID");
+
+                entity.Property(e => e.CommodityId).HasColumnName("CommodityID");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Carts)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Cart_User");
+            });
+
             modelBuilder.Entity<Commodity>(entity =>
             {
                 entity.ToTable("Commodity");

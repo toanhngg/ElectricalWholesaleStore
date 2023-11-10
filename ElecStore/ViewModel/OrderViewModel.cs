@@ -67,6 +67,21 @@ namespace ElecStore.ViewModel
                 }
             }
         }
+        private double _discount;
+        public double Discount
+        {
+            get { return _discount; }
+            set
+            {
+                if (_discount != value)
+                {
+                    _discount = value;
+                    OnPropertyChanged(nameof(Discount));
+                    CalculateTotalPrice();
+
+                }
+            }
+        }
         private double _lasttotalPrice;
         public double LastTotalPrice
         {
@@ -108,7 +123,6 @@ namespace ElecStore.ViewModel
                     _selectedPromotion = value;
                     OnPropertyChanged(nameof(SelectedPromotion));
 
-                    // Gọi phương thức để cập nhật total price khi một promotion được chọn
                     UpdateTotalPrice();
                 }
             }
@@ -171,15 +185,13 @@ namespace ElecStore.ViewModel
                     discount = 0.1; // 10% giảm giá cho mức từ 100 triệu trở lên
                     double additionalDiscount = Math.Floor((TotalPrice - 100000000) / 100000000) * 0.02; // Tính giảm giá bổ sung
                     discount = Math.Min(discount + additionalDiscount, 0.4); // Tối đa 40% giảm giá
-                    LastTotalPrice = TotalPrice - (TotalPrice * discount);
+                    LastTotalPrice = Math.Round(TotalPrice - (TotalPrice * discount));
                 }
                 else
                 {
-                    LastTotalPrice = TotalPrice;
+                    LastTotalPrice = Math.Round(TotalPrice);
                 }
             }
-
-            // Áp dụng các loại giảm giá khác tùy thuộc vào điều kiện
            
         }
 

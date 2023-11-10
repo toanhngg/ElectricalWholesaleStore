@@ -4,9 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ElecStore"
+       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="CartWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <materialDesign:Card Padding="16" Margin="8">
+            <ListView x:Name="lvCart" ItemsSource="{Binding CartItems}" SelectionMode="Multiple">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Commodity" DisplayMemberBinding="{Binding CommodityName}" Width="150"/>
+                        <GridViewColumn Header="Price" DisplayMemberBinding="{Binding UnitPrice}" Width="100"/>
+                        <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}" Width="100"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </materialDesign:Card>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Total : " FontSize="20" Margin="15 0 0 0 " />
+            <TextBlock x:Name="lblTotal" Text="{Binding TotalAmount}" Margin="200 0 0 0 "/>
+            <Button Content="Checkout" Margin="350 0 0 0" Click="Button_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

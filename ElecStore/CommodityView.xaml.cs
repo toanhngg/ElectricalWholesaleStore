@@ -36,19 +36,19 @@ namespace ElecStore
         }
         public void LoadDataListCommodity()
         {
-            var commodityList = _context.Commodities
-               .Join(_context.CommodityCategories,
-        commodity => commodity.CategoryId,
-        category => category.CategoryId,
-        (commodity, category) => new
-        {
-            CommodityID = commodity.CommodityId,
-            CommodityName = commodity.CommodityName,
-            UnitPrice = commodity.UnitPrice,
-            UnitInStock = commodity.UnitInStock,
-            CategoryName = category.CategoryName
-        })
-    .ToList();
+    //        var commodityList = _context.Commodities
+    //           .Join(_context.CommodityCategories,
+    //    commodity => commodity.CategoryId,
+    //    category => category.CategoryId,
+    //    (commodity, category) => new
+    //    {
+    //        CommodityID = commodity.CommodityId,
+    //        CommodityName = commodity.CommodityName,
+    //        UnitPrice = commodity.UnitPrice,
+    //        UnitInStock = commodity.UnitInStock,
+    //        CategoryName = category.CategoryName
+    //    })
+    //.ToList();
 
             // commodityList bây giờ chứa danh sách Commodity kèm theo CategoryName
             listViewCommodity.ItemsSource = _context.Commodities.Include(x => x.Category).ToList();
@@ -57,6 +57,43 @@ namespace ElecStore
 
         }
         
+        private void Button_Add_To_Cart_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Commodity selectedCommodity = (Commodity)button.DataContext;
+            if(selectedCommodity != null )
+            {
+                var existingCartItem = _context.Carts.FirstOrDefault(c => c.UserId == _loggedInUser.UserId && c.CommodityId == selectedCommodity.CommodityId);
+
+                if (existingCartItem != null)
+                {
+                    if(selectedCommodity.UnitInStock < existingCartItem.Quantity)
+                    {
+                        MessageBox.Show( "Số lượng sản phẩm trong kho không đủ","Cart");
+                    }
+                    else
+                    {
+                        existingCartItem.Quantity += 1;
+
+                    }
+                }
+                else
+                {
+                    Cart cart = new Cart
+                    {
+                        CommodityId = selectedCommodity.CommodityId,
+                        UnitPrice = selectedCommodity.UnitPrice,
+                        Quantity = 1,
+                        UserId = _loggedInUser.UserId
+                    };
+                    _context.Carts.Add(cart);
+                }
+
+                _context.SaveChanges();
+                MessageBox.Show("Cart", "Add to cart successfully");
+
+            }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -101,7 +138,7 @@ namespace ElecStore
             }
             else
             {
-                MessageBox.Show("KhÔng tìm thấy sản phẩm bạn yêu cầu!");
+                MessageBox.Show("Không tìm thấy sản phẩm bạn yêu cầu!");
             }
 
         }

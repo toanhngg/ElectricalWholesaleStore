@@ -7,6 +7,7 @@ namespace ElecStore.Models
     {
         public User()
         {
+            Carts = new HashSet<Cart>();
             Orders = new HashSet<Order>();
         }
 
@@ -17,6 +18,7 @@ namespace ElecStore.Models
         public int? StoreId { get; set; }
         public string? PhoneNumber { get; set; }
 
+        public virtual ICollection<Cart> Carts { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

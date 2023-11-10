@@ -58,14 +58,11 @@ namespace ElecStore
 
         private void SomeMethodInCodeBehind()
         {
-            // Lấy ViewModel từ DataContext
             OrderViewModel viewModel = DataContext as OrderViewModel;
 
             // Kiểm tra null trước khi gán giá trị
             if (viewModel != null)
             {
-                // Gán giá trị vào thuộc tính của ViewModel
-          //      viewModel.Price = double.Parse(cm.UnitPrice.ToString()); // Ví dụ giá trị cần gán
  
                 viewModel.UpdatePrice(double.Parse(cm.UnitPrice.ToString()));
 
@@ -117,70 +114,85 @@ namespace ElecStore
             else
             {
                 string commodityName = txtNameProduct.Text; // Ví dụ: lấy giá trị từ ComboBox
-                Date date = new Date
-                { //  DateId = 105,
-                    Day = DateTime.Now.Day,
-                    Month = DateTime.Now.Month,
-                    Quarter = 5,
-                    Year = DateTime.Now.Year
-                };
-                _context.Dates.Add(date);
-                _context.SaveChanges();
                 Commodity cm = _context.Commodities.FirstOrDefault(x => x.CommodityName.Equals(commodityName));
-                // Nếu khách hàng chưa tồn tại, tạo một bản ghi khách hàng mới
-                Customer newCustomer = new Customer
-                {
-                  //  CustomerId = 107,
-                    CustomerName = CustomerName.Text,
-                    CustomerPhone = CustomerAddress.Text,
-                    CustomerAddress = CustomerPhone.Text,
-                    CustomerType = "vip",
-                    Discount = 0.1m,
-                    TotalBought = Int32.Parse(txtTotalPrice.Text),
-                    Comment = CustomerNote.Text,
-                    //// Các thuộc tính khác
-                    //CustomerType = "kk",
-                    //Discount = 0,
-                    //TotalBought = "fff",
-                    //Comment = "ff"
-                };
-                _context.Customers.Add(newCustomer);
-                _context.SaveChanges(); // Lưu bản ghi khách hàng mới
 
-                // Lấy customerId của khách hàng mới tạo
-                int customerId = newCustomer.CustomerId;
-                int selectedPaymentMethodIndex = cbopaymentMethod.SelectedIndex;
-                string paymentMethod = cbopaymentMethod.Items[selectedPaymentMethodIndex].ToString();
-                string invoiceCode = GenerateRandomInvoiceCode();
 
-                Order order = new Order
+                if (cm != null)
                 {
-                   // OrderId = 3,
-                    CommodityId = cm.CommodityId,
-                    DateId = date.DateId,
-                    CustomerId = customerId,
-                    StoreId = _loggedInUser.StoreId,
-                    PricedProducts = Int32.Parse(txtTotalPrice.Text),
-                    PromotionId = cboPromotionID.SelectedIndex,
-                    PaymentMethod = paymentMethod,
-                    InvoiceNumber = invoiceCode,
-                    UserId = _loggedInUser.UserId
-                };
+                    Date date = new Date
+                    { //  DateId = 105,
+                        Day = DateTime.Now.Day,
+                        Month = DateTime.Now.Month,
+                        Quarter = 5,
+                        Year = DateTime.Now.Year
+                    };
+                    _context.Dates.Add(date);
+                    _context.SaveChanges();
+                    Customer newCustomer = new Customer
+                    {
+                        CustomerName = CustomerName.Text,
+                        CustomerPhone = CustomerAddress.Text,
+                        CustomerAddress = CustomerPhone.Text,
+                        CustomerType = "vip",
+                        Discount = 0.1m,
+                        TotalBought = Int32.Parse(txtTotalPrice.Text),
+                        Comment = CustomerNote.Text,
+                    };
+                    _context.Customers.Add(newCustomer);
+                    _context.SaveChanges(); // Lưu bản ghi khách hàng mới
+
+                    int customerId = newCustomer.CustomerId;
+                    int quatity = Int32.Parse(txtQuantity.Text.ToString());
+                    int selectedPaymentMethodIndex = cbopaymentMethod.SelectedIndex;
+                    string paymentMethod = cbopaymentMethod.Items[selectedPaymentMethodIndex].ToString();
+                    string invoiceCode = GenerateRandomInvoiceCode();
+
+                    Order order = new Order
+                    {
+                        CommodityId = cm.CommodityId,
+                        DateId = date.DateId,
+                        CustomerId = customerId,
+                        StoreId = _loggedInUser.StoreId,
+                        PricedProducts = Int32.Parse(txtTotalPrice.Text),
+                        PromotionId = cboPromotionID.SelectedIndex,
+                        PaymentMethod = paymentMethod,
+                        InvoiceNumber = invoiceCode,
+                        UserId = _loggedInUser.UserId
+                    };
 
                     _context.Orders.Add(order);
                     _context.SaveChanges();
-                OrderDetail orderdetail = new OrderDetail
-                {
-                    // OrderId = 3,
-                    OrderId = order.OrderId,
-                    UnitPrice = decimal.Parse(cm.UnitPrice.ToString()),
-                    Quantity = customerId,
-                    TotalPrice = Int32.Parse(txtTotalPrice.Text)
+                    OrderDetail orderdetail = new OrderDetail
+                    {
+                        OrderId = order.OrderId,
+                        UnitPrice = decimal.Parse(cm.UnitPrice.ToString()),
+                        Quantity = quatity,
+                        TotalPrice = Int32.Parse(txtTotalPrice.Text)
+                    };
+                    _context.OrderDetails.Add(orderdetail);
+                    _context.SaveChanges();
+                    if (cm.UnitInStock >= quatity)
+                    {
+                        cm.UnitInStock -= quatity;
+                        _context.Commodities.Update(cm);
+                        _context.SaveChanges();
+                        MessageBox.Show("Đặt hàng thành công!"); // Hiển thị thông báo khi insert thành công
 
-                };
-                _context.OrderDetails.Add(orderdetail);
-                _context.SaveChanges();
-                MessageBox.Show("Đặt hàng thành công!"); // Hiển thị thông báo khi insert thành công
+                        if (cm.UnitInStock < 100)
+                        {
+                            MessageBox.Show("Sản phẩm vừa rồi trogn kho chỉ còn dưới 100!"); // Hiển thị thông báo khi insert thành công
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Số lượng tồn kho không đủ để thực hiện đặt hàng.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy sản phẩm trong cơ sở dữ liệu.");
+                }
+           
                     HomePage homePage = new HomePage(_context, _loggedInUser);
                     homePage.Show();
 

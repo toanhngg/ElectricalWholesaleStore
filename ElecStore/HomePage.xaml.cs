@@ -101,7 +101,9 @@ namespace ElecStore
 
         private void CartButton_Click(object sender, RoutedEventArgs e)
         {
+            CartWindow cart = new CartWindow(_context, _loggedInUser);
 
+            cart.Show();
         }
     }
 }

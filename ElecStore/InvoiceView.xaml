@@ -14,22 +14,20 @@
             <TextBlock Text="Hóa Đơn" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 0 0 10"/>
 
             <!-- Thông tin đơn hàng -->
-            <TextBlock Text="Thông Tin Đơn Hàng" FontSize="16" FontWeight="Bold" Margin="0 0 0 10"/>
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+            <!--<StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                 <TextBlock Text="Số Lượng:" FontWeight="Bold" Margin="0 0 10 0"/>
-                <TextBlock Text="{Binding Quantity}" />
+                <TextBlock x:Name="txtQuantity"  />
+            </StackPanel>-->
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10" >
+                <TextBlock  FontSize="18"  Text=" Số tiền bạn phải thanh toán:" FontWeight="Bold" Margin="0 0 10 0"/>
+                <TextBlock  FontSize="18" x:Name="txtTotal"  />
+                <TextBlock  FontSize="18"  Text=" VNĐ" FontWeight="Bold" Margin="10 0 10 0"/>
+
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                <TextBlock Text="Giá Tiền:" FontWeight="Bold" Margin="0 0 10 0"/>
-                <TextBlock Text="{Binding TotalPrice}" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
-                <TextBlock Text="Chiết Khấu:" FontWeight="Bold" Margin="0 0 10 0"/>
-                <TextBlock Text="{Binding Discount}" />
-            </StackPanel>
+    
 
             <!-- Button để in hóa đơn -->
-            <Button Content="In Hóa Đơn" Command="{Binding PrintInvoiceCommand}" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+            <Button Content="In Hóa Đơn" Command="{Binding PrintInvoiceCommand}" HorizontalAlignment="Center" Margin="0 20 0 0" Click="Button_Click"/>
         </StackPanel>
     </Grid>
 </Window>
