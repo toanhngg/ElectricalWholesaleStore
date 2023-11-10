@@ -32,18 +32,18 @@
                 </TabItem>
 
                 <TabItem x:Name="Tab2"
-           Header="Order">
+           Header="Customer View">
                     <!--<Frame Source="Order.xaml" Navigated="Frame_Navigated"/>-->
                 </TabItem>
 
                 <TabItem x:Name="Tab3"
-           Header="Customer View">
+           Header="Order View">
                     <Frame x:Name="frMain1"/>
 
                 </TabItem>
 
                 <TabItem x:Name="Tab4"
-           Header="Thêm sản phẩm">
+           Header="Manager Commodity">
 
                 </TabItem>
 

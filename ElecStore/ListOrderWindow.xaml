@@ -5,55 +5,97 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ElecStore"
       mc:Ignorable="d" 
-     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local1="clr-namespace:ElecStore.ViewModel"
       Background="White"
-      d:DesignHeight="450" d:DesignWidth="1250"
+      d:DesignHeight="450" d:DesignWidth="1300"
       Title="ListOrderWindow">
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <!-- Thanh tìm kiếm -->
+        <Grid Margin="10 20 0 20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="145*"/>
+                <ColumnDefinition Width="76*"/>
+                <ColumnDefinition Width="39*"/>
+                <ColumnDefinition Width="95*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="355*"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" FontSize="15">From :</TextBlock>
+            <DatePicker x:Name="startDatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged" Grid.Column="1" Style="{StaticResource MaterialDesignOutlinedDatePicker}" Grid.ColumnSpan="4" />
+            <TextBlock  Grid.Column="5" VerticalAlignment="Center" FontSize="15" Margin="8,0,0,0">To :</TextBlock>
+            <DatePicker  x:Name="endDatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged" Grid.Column="6" Style="{StaticResource MaterialDesignOutlinedDatePicker }" />
+            <Button
+                        Grid.Column="7" Margin="8,1,8,1" Height="48"
+                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0" Click="Button_Click">
+                Search
+            </Button>
+        </Grid>
+
+        <!-- Phần danh sách đơn hàng -->
         <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <materialDesign:Card Grid.Column="0" Margin="0,10,20,0" Width="1300">
+                <ListView x:Name="lstOrders" SelectionChanged="lstOrders_SelectionChanged">
+                    <ListView.View>
+                        <GridView>
+                            <!-- Các cột của Order -->
+                            <GridViewColumn Width="Auto" Header="OrderID" DisplayMemberBinding="{Binding OrderId}"/>
+                            <GridViewColumn Width="Auto" Header="Name" DisplayMemberBinding="{Binding Commodity.CommodityName}"/>
+                            <GridViewColumn Width="Auto" Header="Customer" DisplayMemberBinding="{Binding Customer.CustomerName}"/>
+                            <GridViewColumn Header="OrderDate">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0:00}/{1:00}/{2:00}">
+                                                    <Binding Path="Date.Day" />
+                                                    <Binding Path="Date.Month" />
+                                                    <Binding Path="Date.Year" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="Auto" Header="PricedProducts" DisplayMemberBinding="{Binding PricedProducts}"/>
+                            <GridViewColumn Width="Auto" Header="Store" DisplayMemberBinding="{Binding Store.StoreName}"/>
+                            <GridViewColumn Width="Auto" Header="PaymentMethod" DisplayMemberBinding="{Binding PaymentMethod}"/>
+                            <GridViewColumn Width="Auto" Header="Detail" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Margin="10 0 0 0"
+                               Background="ForestGreen"
+                              Foreground="White"
+                                Height="40"
+                              Width="Auto"
+                          Content="Xem chi tiết"
+                          Click="ButtonDetail_Click"  />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                <!-- ListView Order bên trái -->
-                <materialDesign:Card Grid.Column="0" Margin="0,10,20,0" Width="780">
-                    <ListView x:Name="lstOrders" SelectionChanged="lstOrders_SelectionChanged">
-                        <ListView.View>
-                            <GridView>
-                                <!-- Các cột của Order -->
-                                <GridViewColumn Header="OrderID" DisplayMemberBinding="{Binding OrderId}"/>
-                                <GridViewColumn Header="CommodityID" DisplayMemberBinding="{Binding CommodityID}"/>
-                                <GridViewColumn Header="CustomerID" DisplayMemberBinding="{Binding CustomerID}"/>
-                                <GridViewColumn Header="StoreID" DisplayMemberBinding="{Binding StoreID}"/>
-                                <GridViewColumn Header="PromotionID" DisplayMemberBinding="{Binding PromotionID}"/>
-                                <GridViewColumn Header="PaymentMethod" DisplayMemberBinding="{Binding PaymentMethod}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </materialDesign:Card>
-
-                <materialDesign:Card Grid.Column="1" Width="470"  Margin="0,10,20,0">
-                    <ListView x:Name="lstOrderDetails" ItemsSource="{Binding SelectedItem.orderDetails, ElementName=lstOrders}">
-                        <ListView.View>
-                            <GridView>
-                                <!-- Các cột của OrderDetail -->
-                                <GridViewColumn Header="OrderId" DisplayMemberBinding="{Binding OrderId}"/>
-                                <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding UnitPrice}"/>
-                                <GridViewColumn Header="Quantity" DisplayMemberBinding="{Binding Quantity}"/>
-                                <GridViewColumn Header="TotalPrice" DisplayMemberBinding="{Binding TotalPrice}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </materialDesign:Card>
-
-            </Grid>
-
-
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </materialDesign:Card>
         </Grid>
     </Grid>
 </Page>

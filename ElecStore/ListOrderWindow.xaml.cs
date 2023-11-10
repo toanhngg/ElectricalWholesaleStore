@@ -1,6 +1,10 @@
-﻿using ElecStore.Models;
+﻿using DocumentFormat.OpenXml.Office.CustomUI;
+using ElecStore.Models;
+using ElecStore.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -24,34 +28,64 @@ namespace ElecStore
     {
         private readonly ElectricStore1Context _context;
         private readonly User _loggedInUser;
+       private readonly ListOrderViewModel _viewModel;
+
         public ListOrderWindow(ElectricStore1Context context, User loggedInUser)
         {
             InitializeComponent();
-            _loggedInUser = loggedInUser;
+            _viewModel = new ListOrderViewModel(context);
+            DataContext = _viewModel;
             _context = context;
-            LoadOrder();
+            // Liên kết lstOrders với OrdersCollectionView từ ViewModel
+            lstOrders.ItemsSource = _viewModel.OrdersCollectionView;
+            // Liên kết lstOrders với OrdersCollectionView từ ViewModel
+            //Order selectedOrder = (Order)lstOrders.SelectedItem;
+            //   _viewModel.SelectedOrder = selectedOrder;
+            //lstOrderDetails.ItemsSource = _viewModel.OrderDetails.To;
+            // Khởi tạo lstOrderDetails và liên kết với OrderDetails từ ViewModel
         }
-        public void LoadOrder()
-        {
-            lstOrders.ItemsSource = _context.Orders.ToList();
-        }
+
         private void lstOrders_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Order selectedOrder = (Order)lstOrders.SelectedItem;
+            _viewModel.SelectedOrder = selectedOrder;
+           //lstOrderDetails.ItemsSource = _viewModel.OrderDetails;
 
-            if (selectedOrder != null)
-            {
-                Debug.WriteLine($"Selected Order ID: {selectedOrder.OrderId}");
+        }
+        private void ButtonDetail_Click(object sender, RoutedEventArgs e)
+        {
+           
 
-                // Truy vấn cơ sở dữ liệu để lấy danh sách OrderDetails tương ứng với OrderID
-                List<OrderDetail> orderDetails = _context.OrderDetails.Where(od => od.OrderId == selectedOrder.OrderId).ToList();
+        }
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Lọc danh sách đơn hàng dựa trên khoảng thời gian từ startDatePicker đến endDatePicker
+            DateTime startDate = startDatePicker.SelectedDate ?? DateTime.Now;
+            DateTime endDate = endDatePicker.SelectedDate ?? DateTime.Now;
 
-                // Gán danh sách OrderDetails cho ItemsSource của lstOrderDetails
-                lstOrderDetails.ItemsSource = orderDetails;
+            // Thực hiện logic lọc dữ liệu dựa trên khoảng thời gian (startDate, endDate)
+            // Ví dụ: filterOrdersByDateRange(startDate, endDate);
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime startDate = startDatePicker.SelectedDate ?? DateTime.MinValue;
+            DateTime endDate = endDatePicker.SelectedDate ?? DateTime.MaxValue;
 
-                // Gán selectedOrder làm DataContext cho lstOrderDetails
-                lstOrderDetails.DataContext = selectedOrder;
-            }
+            var filteredOrders = _context.Orders.Where(order =>
+          (
+              (order.Date.Year > startDate.Year && order.Date.Year < endDate.Year) ||
+              (order.Date.Year == startDate.Year && order.Date.Month > startDate.Month) ||
+              (order.Date.Year == endDate.Year && order.Date.Month < endDate.Month)
+          ) ||
+          (
+              (order.Date.Year == startDate.Year && order.Date.Month == startDate.Month && order.Date.Day >= startDate.Day) &&
+              (order.Date.Year == endDate.Year && order.Date.Month == endDate.Month && order.Date.Day <= endDate.Day)
+          )
+      );
+
+
+
+            lstOrders.ItemsSource = filteredOrders.ToList();
         }
 
     }

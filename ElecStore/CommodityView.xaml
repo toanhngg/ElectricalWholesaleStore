@@ -41,14 +41,14 @@
                         <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Path=Category.CategoryName}" />
                         <GridViewColumn Header="UnitPrice" DisplayMemberBinding="{Binding Path=UnitPrice}" />
                         <GridViewColumn Header="UnitInStock" DisplayMemberBinding="{Binding Path=UnitInStock}" />
-                        <GridViewColumn Header="Hành động">
+                        <GridViewColumn Header="Action">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button
                                Background="ForestGreen"
                                Foreground="White"
-                                Height="20"
-                                Width="60"
+                                Height="40"
+                                Width="100"
                                   
                                Content="Mua hàng"
                                Click="Button_Click"  />
